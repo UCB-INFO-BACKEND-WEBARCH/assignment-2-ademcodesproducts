@@ -18,7 +18,9 @@ def list_categories():
 
 @categories.route('/categories/<int:category_id>', methods=['GET'])
 def get_category(category_id):
-    category = CategoryModel.query.get_or_404(category_id)
+    category = CategoryModel.query.get(category_id)
+    if category is None:
+        return jsonify({'error': 'Category not found'}), 404
     data = category.to_dict()
     data['tasks'] = [
         {'id': t.id, 'title': t.title, 'completed': t.completed}
@@ -44,7 +46,9 @@ def create_category():
 
 @categories.route('/categories/<int:category_id>', methods=['DELETE'])
 def delete_category(category_id):
-    category = CategoryModel.query.get_or_404(category_id)
+    category = CategoryModel.query.get(category_id)
+    if category is None:
+        return jsonify({'error': 'Category not found'}), 404
 
     if category.tasks:
         return jsonify({'error': 'Cannot delete category with existing tasks. Move or delete tasks first.'}), 400

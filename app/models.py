@@ -21,10 +21,11 @@ class TaskModel(db.Model):
             'title': self.title,
             'description': self.description,
             'completed': self.completed,
-            'due_date': self.due_date,
+            'due_date': self.due_date.isoformat() if self.due_date else None,
             'category_id': self.category_id,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'category': self.category.to_dict() if self.category else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
         }
 
 class CategoryModel(db.Model):
